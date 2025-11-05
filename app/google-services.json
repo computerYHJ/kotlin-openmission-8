@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "120032313963",
+    "firebase_url": "https://workout-2024-32a2f-default-rtdb.firebaseio.com",
+    "project_id": "workout-2024-32a2f",
+    "storage_bucket": "workout-2024-32a2f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120032313963:android:a3303ce2c5b213b5f8a72e",
+        "android_client_info": {
+          "package_name": "com.example.kotlin_openmission_8"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQfE06Bo6p9J_-_gN_WbrNl8CpT6laJVg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120032313963:android:4165091c68c5b955f8a72e",
+        "android_client_info": {
+          "package_name": "com.example.termproject1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQfE06Bo6p9J_-_gN_WbrNl8CpT6laJVg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
