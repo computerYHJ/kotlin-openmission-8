@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="#F8FAF7"
+    android:layout_height="match_parent">
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginStart="10dp"
+        android:id="@+id/previous_button"
+        android:scaleType="fitXY"
+        android:src="@drawable/previous_button1"
+        android:background="@android:color/transparent"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:text="Workout과 함께\n운동을 더욱 재미있게."
+        android:textColor="@color/black"
+        android:fontFamily="@font/nanumyethangul"
+        android:textSize="30dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1.5dp"
+        android:layout_marginVertical="25dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@android:color/black"/>
+
+    <LinearLayout
+        android:id="@+id/registerInputIdLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="start"
+                android:text="아이디"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/registerInputIdDuplicatedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:visibility="invisible"
+                android:text="사용할 수 없는 아이디입니다."
+                android:textColor="#ff0000"/>
+
+        </LinearLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:columnCount="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_gravity="center">
+
+                <EditText
+                    android:id="@+id/registerInputIdEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingStart="15dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:layout_column="1"
+                    android:hint="아이디를 입력하세요(6~15자)"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp">
+                <Button
+                    android:id="@+id/registerInputIdDuplicateCheckBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@drawable/rounded_button"
+                    android:textColor="@color/white"
+                    android:text="중복 확인"/>
+            </LinearLayout>
+        </GridLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/registerInputPasswordLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="start"
+                android:text="비밀번호"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/registerInputPasswordLength"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text=""
+                android:textColor="#ff0000"/>
+        </LinearLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:columnCount="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_gravity="center">
+                <EditText
+                    android:id="@+id/registerInputPasswordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_column="1"
+                    android:background="@drawable/rounded_edittext"
+                    android:hint="비밀번호를 입력하세요 (8~20자)"
+                    android:inputType="textPassword"
+                    android:paddingStart="15dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/baseline_visibility_off_24"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/registerInputPasswordVisibleBtn"/>
+            </LinearLayout>
+        </GridLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/registerInputPasswordCorrectLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="start"
+                android:text="비밀번호 확인"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/registerInputPasswordWrong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text=""
+                android:textColor="#ff0000"/>
+        </LinearLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:columnCount="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_gravity="center">
+                <EditText
+                    android:id="@+id/registerInputSamePasswordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_column="1"
+                    android:background="@drawable/rounded_edittext"
+                    android:hint="비밀번호 재입력"
+                    android:inputType="textPassword"
+                    android:paddingStart="15dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/baseline_visibility_off_24"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/registerInputSamePasswordVisibleBtn"/>
+            </LinearLayout>
+        </GridLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/registerInputNameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="start"
+                android:text="이름"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/registerInputNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/rounded_edittext"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:hint="이름을 입력하세요."/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/registerInputEmailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="start"
+                android:text="이메일 주소"
+                android:textColor="@color/black"/>
+            <TextView
+                android:id="@+id/registerInputEmailDuplicatedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:visibility="invisible"
+                android:text="사용할 수 없는 이메일입니다."
+                android:textColor="#ff0000"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/registerInputEmailEditText1"
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/rounded_edittext"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="15dp"
+                android:hint="이메일 주소"/>
+            <TextView
+                android:layout_weight="3"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_height="50dp"
+                android:textSize="20dp"
+                android:text="\@"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:id="@+id/registerInputEmailEditText2"
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/rounded_edittext"
+                android:layout_gravity="center_vertical"
+                android:paddingStart="15dp"
+                android:hint="naver.com"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/registerInputGoal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="start"
+                android:text="목표 운동횟수"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/registerInputGoalEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/rounded_edittext"
+            android:layout_gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:inputType="number"
+            android:hint="목표 운동횟수를 적어주세요 (한달 기준)."/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_marginTop="50dp"
+        android:layout_marginHorizontal="60dp"
+        android:background="@drawable/rounded_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="회원 가입"
+        android:textColor="@color/white"
+        android:textSize="20dp"/>
+</LinearLayout>
