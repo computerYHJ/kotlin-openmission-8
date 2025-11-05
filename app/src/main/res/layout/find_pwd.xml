@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8FAF7"
+    android:gravity="center_horizontal">
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:layout_gravity="start"
+        android:id="@id/previous_button"
+        android:scaleType="fitXY"
+        android:src="@drawable/previous_button1"
+        android:background="@android:color/transparent"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/workout2"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="60dp"
+        android:text="비밀번호 찾기"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        />
+
+    <LinearLayout
+        android:id="@+id/findPwResultLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+        <TextView
+            android:id="@+id/findPwResultTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" - - - - "
+            android:textColor="@color/black"
+            android:textSize="19dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginVertical="30sp">
+
+
+        <EditText
+            android:id="@+id/findPwdIdText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_edittext"
+            android:paddingStart="15dp"
+            android:hint="사용자 아이디"/>
+
+        <EditText
+            android:id="@+id/findPwdEmailText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_edittext"
+            android:paddingStart="15dp"
+            android:hint="사용자 이메일"/>
+
+        <TextView
+            android:id="@+id/findPwdFailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:visibility="invisible"
+            android:text="이름이나 이메일을 다시 입력하세요"
+            android:textColor="#ff0000"/>
+
+        <Button
+            android:id="@+id/findPwBtn"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:text="비밀번호 찾기"
+            android:textColor="@color/white"
+            android:textSize="20dp"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>
