@@ -25,6 +25,7 @@ class LoginActivity : AppCompatActivity() {
         binding.previousButton.setOnClickListener { finish() }
         binding.finalLoginBtn.setOnClickListener { clickLoginBtn() }
         binding.findIdLoginPage.setOnClickListener { findIdClick() }
+        binding.findPwLoginPage.setOnClickListener { findPwdClick() }
     }
 
     private fun clickLoginBtn() = with(binding) {
@@ -72,6 +73,13 @@ class LoginActivity : AppCompatActivity() {
         with(binding){
             findIdLoginPage.setOnClickListener {
                 startActivity(Intent(this@LoginActivity, FindIdActivity::class.java))
+            }
+        }
+    }
+    private fun findPwdClick(){
+        with(binding){
+            findPwLoginPage.setOnClickListener {
+                startActivity(Intent(this@LoginActivity, FindPwdActivity::class.java))
             }
         }
     }
