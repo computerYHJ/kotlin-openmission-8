@@ -23,12 +23,21 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         loginBtnClick()
+        findIdClick()
     }
 
     private fun loginBtnClick(){
         with(binding){
             LoginBtn.setOnClickListener {
                 startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+            }
+        }
+    }
+
+    private fun findIdClick(){
+        with(binding){
+            findIdPage.setOnClickListener {
+                startActivity(Intent(this@MainActivity, FindIdActivity::class.java))
             }
         }
     }
