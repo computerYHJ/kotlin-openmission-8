@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8FAF7"
+    android:gravity="center_horizontal">
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginVertical="30dp"
+        android:layout_marginStart="10dp"
+        android:layout_gravity="start"
+        android:id="@+id/previous_button"
+        android:scaleType="fitXY"
+        android:src="@drawable/previous_button1"
+        android:background="@android:color/transparent"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/workout2"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="30dp">
+
+
+        <EditText
+            android:id="@+id/loginInputIdEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded_edittext"
+            android:paddingStart="15dp"
+            android:hint="아이디"/>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:columnCount="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_gravity="center">
+                <EditText
+                    android:id="@+id/loginInputPasswordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_column="1"
+                    android:background="@drawable/rounded_edittext"
+                    android:hint="비밀번호"
+                    android:inputType="textPassword"
+                    android:paddingStart="15dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_column="0"
+                android:layout_row="0"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:layout_marginRight="5dp">
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/baseline_visibility_off_24"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/loginInputPasswordVisibleBtn"/>
+            </LinearLayout>
+        </GridLayout>
+
+        <TextView
+            android:id="@+id/loginFailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:visibility="invisible"
+            android:text="아이디나 비밀번호를 다시 입력하세요"
+            android:textColor="#ff0000"/>
+
+        <Button
+            android:id="@+id/finalLoginBtn"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:text="로그인"
+            android:textColor="@color/white"
+            android:textSize="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="fill_horizontal"
+            android:layout_marginTop="25dp"
+            android:layout_marginHorizontal="40dp">
+            <TextView
+                android:id="@+id/findIdLoginPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="아이디 찾기"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:id="@+id/findPwLoginPage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:text="비밀번호 찾기"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
