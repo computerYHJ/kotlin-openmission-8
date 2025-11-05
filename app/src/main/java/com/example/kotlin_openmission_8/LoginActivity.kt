@@ -1,5 +1,6 @@
 package com.example.kotlin_openmission_8
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -23,6 +24,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.previousButton.setOnClickListener { finish() }
         binding.finalLoginBtn.setOnClickListener { clickLoginBtn() }
+        binding.findIdLoginPage.setOnClickListener { findIdClick() }
     }
 
     private fun clickLoginBtn() = with(binding) {
@@ -63,6 +65,14 @@ class LoginActivity : AppCompatActivity() {
                     if (result.isSuccessful) Log.d("D", "Login Success")
                     else showError("아이디나 비밀번호가 일치하지 않습니다")
                 }
+        }
+    }
+
+    private fun findIdClick(){
+        with(binding){
+            findIdLoginPage.setOnClickListener {
+                startActivity(Intent(this@LoginActivity, FindIdActivity::class.java))
+            }
         }
     }
 }
