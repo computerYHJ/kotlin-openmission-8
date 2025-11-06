@@ -20,9 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".FindIdActivity"/>
-        <activity android:name=".FindPwdActivity"/>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".FindIdActivity" />
+        <activity android:name=".FindPwdActivity" />
+        <activity
+            android:name=".RegisterActivity"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
