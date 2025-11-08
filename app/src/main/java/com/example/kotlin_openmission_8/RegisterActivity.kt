@@ -26,12 +26,17 @@ class RegisterActivity : AppCompatActivity() {
     private var pwdFlag: Int = -1
     private var emailFlag: Int = -1
 
+    private var user: User = User()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = RegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.previousButton.setOnClickListener { finish() }
+
+        binding.registerEmailDuplicateBtn.isEnabled = false
+        binding.registerIdDuplicateBtn.isEnabled = false
 
         checkInput(binding.registerIdText, binding.registerIdMessageText, "아이디", 6, 15)
         checkInput(binding.registerPwdText, binding.registerPwdMessage, "비밀번호", 8, 20)
@@ -62,17 +67,18 @@ class RegisterActivity : AppCompatActivity() {
 
     private suspend fun duplicateBtn(editView: EditText, textView: TextView, fields: String, loc: String) {
         val input: String = editView.text.toString()
+        val state = duplicate(fields, input, textView, loc)
         when(fields){
-            "userID" -> when(duplicate(fields, input, textView, loc)){
-                1 -> if(flag == 99) id = input
-                else -> id = ""
+            "userID" -> when(flag){
+                99 -> if(state == 1) user.ID = input
+                else {user.ID = ""}
             }
-            "userEmail" -> when(duplicate(fields, input, textView, loc)){
-                1 -> if(emailFlag == 99) email = input
-                else -> email = ""
+            "userEmail" -> when(emailFlag){
+                99 -> if(state == 1) user.Email = input
+                else {user.Email = ""}
             }
         }
-        Log.d("CHECK INPUT ERROR", "$id, $email")
+        Log.d("CHECK INPUT ERROR", "${user.ID}, ${user.Email}")
     }
 
     private suspend fun duplicate(
@@ -83,7 +89,6 @@ class RegisterActivity : AppCompatActivity() {
     ): Int{
         return when(UserRepository.checkDupliceate(input,fields)) {
             1 -> 1.also{resisterMessagePrint(textView, "사용할 수 있는 ${loc}입니다.", Color.BLUE)}
-            2 -> 2.also{resisterMessagePrint(textView, "${loc}가(이) 입력되지 않았습니다.", Color.RED)}
             3 -> 3.also{resisterMessagePrint(textView, "중복된 ${loc}를(을) 입력했습니다.", Color.RED)}
             else -> 0
         }
@@ -101,21 +106,41 @@ class RegisterActivity : AppCompatActivity() {
         loc: String,
         start: Int,
         end: Int
-    ) {
+    ) = with(binding){
         editView.addTextChangedListener { s ->
             editView.filters = arrayOf(InputFilter.LengthFilter(end + 1))
             var target = s.toString()
 
             when (InputValidator.validatorInput(target, start, end, loc)) {
                 1 -> {resisterMessagePrint(textView, "형식에 맞는 입력이 아닙니다.", Color.RED)
-                    if(loc == "아이디") flag = 1; else pwdFlag = 1}
+                    if(loc == "아이디") { flag = 1; btnHandle(loc) }; else pwdFlag = 1}
+
                 2 -> { resisterMessagePrint(textView, "${loc}는 ${start}자 이상 입력해주세요.", Color.RED)
-                    if(loc == "아이디") flag = 2; else pwdFlag = 2}
+                    if(loc == "아이디") { flag = 2; btnHandle(loc) }; else pwdFlag = 2}
+
                 3 -> { resisterMessagePrint(textView, "${loc}는 ${start}자 이하로 입력해주세요.", Color.RED)
-                    if(loc == "아이디") flag = 3; else pwdFlag = 3}
-                4 -> emailFlag = 4.also { resisterMessagePrint(textView, "이메일 형식에 맞지 않습니다.", Color.RED) }
-                else -> { textView.visibility = View.INVISIBLE; emailFlag = 99
-                    if(loc == "아이디") flag = 99; else pwdFlag = 99}
+                    if(loc == "아이디") { flag = 3; btnHandle(loc) }; else pwdFlag = 3}
+
+                4 -> { resisterMessagePrint(textView, "이메일 형식에 맞지 않습니다.", Color.RED); emailFlag = 4 ; btnHandle(loc) }
+
+                else -> { textView.visibility = View.INVISIBLE
+                    if (loc == "아이디") { flag = 99; btnHandle(loc) }
+                    else if (loc == "email") { emailFlag = 99; btnHandle(loc) }
+                    else pwdFlag = 99
+                }
+            }
+        }
+    }
+
+    private fun btnHandle(loc: String){
+        when(loc){
+            "아이디" -> when(flag){
+                99 -> binding.registerIdDuplicateBtn.isEnabled = true
+                else -> binding.registerIdDuplicateBtn.isEnabled = false
+            }
+            "email" -> when(emailFlag){
+                99 -> binding.registerEmailDuplicateBtn.isEnabled = true
+                else -> binding.registerEmailDuplicateBtn.isEnabled = false
             }
         }
     }
@@ -132,18 +157,18 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun checkSamePwd(pwd: String, samePwd: String) = with(binding) {
         when(InputValidator.validatorPwd(pwd, samePwd)){
-            1 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 먼저 입력하세요.", Color.RED); password = ""}
-            2 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED); password = ""}
-            3 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호가 일치하지 않습니다.", Color.RED); password = ""}
-            4 -> {if(pwdFlag == 99) {registerSamePwdMsg.visibility = View.INVISIBLE; password = samePwd}
-            else {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED); password = ""}}
+            1 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 먼저 입력하세요.", Color.RED); user.PW = ""}
+            2 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED); user.PW = ""}
+            3 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호가 일치하지 않습니다.", Color.RED); user.PW = ""}
+            4 -> {if(pwdFlag == 99) {registerSamePwdMsg.visibility = View.INVISIBLE; user.PW = samePwd}
+            else {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED); user.PW = ""}}
         }
     }
 
     private suspend fun register() {
-        Log.d("Register", "$id, $password, $email")
-        if (!id.isEmpty() && !password.isEmpty() && !email.isEmpty()) {
-            UserRepository.register(id,password,email)
+        Log.d("Register", "${user.ID}, ${user.PW}, ${user.Email}")
+        if (!user.ID.isEmpty() && !user.PW.isEmpty() && !user.Email.isEmpty()) {
+            UserRepository.register(user)
         } else {
             Toast.makeText(this@RegisterActivity, "잘못된 입력이 존재합니다.", Toast.LENGTH_LONG).show()
         }
