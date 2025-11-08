@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         }
         loginBtnClick()
         findIdClick()
+        registerBtnClick()
     }
 
     private fun loginBtnClick(){
@@ -38,6 +39,14 @@ class MainActivity : AppCompatActivity() {
         with(binding){
             findIdPage.setOnClickListener {
                 startActivity(Intent(this@MainActivity, FindIdActivity::class.java))
+            }
+        }
+    }
+
+    private fun registerBtnClick(){
+        with(binding){
+            registerBtn.setOnClickListener {
+                startActivity(Intent(this@MainActivity, RegisterActivity::class.java))
             }
         }
     }
