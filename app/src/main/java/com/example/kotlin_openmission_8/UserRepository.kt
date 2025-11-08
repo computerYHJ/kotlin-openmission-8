@@ -16,7 +16,6 @@ object UserRepository {
                 .get()
                 .await()//
             when{
-                input.isEmpty() -> 2
                 result.isEmpty -> 1
                 !result.isEmpty -> 3
                 else -> 0
@@ -24,12 +23,12 @@ object UserRepository {
         } catch (e: Exception){ 0 }
     }
 
-    suspend fun register(id: String, password: String, email: String){
+    suspend fun register(user: User){
         val mAuth = FirebaseAuth.getInstance()
         val dbUsers = db.collection("users")
         try{
-            mAuth.createUserWithEmailAndPassword(email, password).await()
-            dbUsers.add(User(userID = id, userPW = password, userEmail = email)).await()
+            mAuth.createUserWithEmailAndPassword(user.Email, user.PW).await()
+            dbUsers.add(user).await()
         } catch (e: Exception) {
             Log.e("REGISTER ERROR", "회원가입이 실패하였습니다.")
         }

@@ -21,7 +21,6 @@ object InputValidator {
             loc != "email" && input.length < start -> 2
             loc != "email" && input.length > end -> 3
             loc == "email" && !emailPattern.matcher(input).matches() -> 4
-            input.isEmpty() -> 2
             else -> 99
         }
     }
