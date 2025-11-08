@@ -25,4 +25,15 @@ object InputValidator {
             else -> 99
         }
     }
+
+    fun validatorPwd(pwd: String, samePwd: String): Int{
+        return when(pwd.isEmpty()){
+            true -> 1
+            false -> when{
+                samePwd.isEmpty() -> 2
+                pwd != samePwd -> 3
+                else -> 4
+            }
+        }
+    }
 }
