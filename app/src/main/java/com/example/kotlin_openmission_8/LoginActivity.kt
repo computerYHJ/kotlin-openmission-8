@@ -5,17 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.kotlin_openmission_8.databinding.LoginBinding
 import com.example.kotlin_openmission_8.validator.InputValidator
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: LoginBinding
-    private var db = FirebaseFirestore.getInstance()
-    private var dbUsers = db.collection("users")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +28,9 @@ class LoginActivity : AppCompatActivity() {
     private fun clickLoginBtn() = with(binding) {
         val id: String = loginInputIdEditText.text.toString()
         val pwd: String = loginInputPasswordEditText.text.toString()
-        if(noInput(id,pwd)) attemptLogin(id,pwd)
+        if(noInput(id,pwd)) {
+            lifecycleScope.launch { attemptLogin(id, pwd) }
+        }
     }
 
     private fun noInput(id: String, pwd: String): Boolean = with(binding) {
@@ -49,23 +48,12 @@ class LoginActivity : AppCompatActivity() {
         binding.loginFailText.visibility = View.VISIBLE
     }
 
-    private fun attemptLogin(id: String, pwd: String) {
-        dbUsers.whereEqualTo("userID", id).get().addOnCompleteListener { result ->
-            val doc = result.result
-            if (doc.isEmpty) return@addOnCompleteListener showError("아이디나 비밀번호가 일치하지 않습니다")
-            else login(pwd, doc)
-        }
-    }
-
-    private fun login(pwd: String, doc: QuerySnapshot) {
-        doc.forEach { info ->
-            val email: String = info.getString("userEmail") ?: return showError("이메일이 잘못되었습니다. 관리자에게 문의해주세요")
-            FirebaseAuth.getInstance()
-                .signInWithEmailAndPassword(email, pwd)
-                .addOnCompleteListener { result ->
-                    if (result.isSuccessful) Log.d("D", "Login Success")
-                    else showError("아이디나 비밀번호가 일치하지 않습니다")
-                }
+    private suspend fun attemptLogin(id: String, pwd: String) {
+        when(UserRepository.attemptLogin(id, pwd)){
+            1 -> showError("아이디가 일치하지 않습니다")
+            2 -> showError("이메일이 잘못되었습니다. 관리자에게 문의해주세요")
+            0 -> showError("비밀번호가 일치하지 않습니다")
+            99 -> Log.d("D", "Login Success")
         }
     }
 
