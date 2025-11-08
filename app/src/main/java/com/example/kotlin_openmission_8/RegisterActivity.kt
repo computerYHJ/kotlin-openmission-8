@@ -41,6 +41,7 @@ class RegisterActivity : AppCompatActivity() {
         checkInput(binding.registerIdText, binding.registerIdMessageText, "아이디", 6, 15)
         checkInput(binding.registerPwdText, binding.registerPwdMessage, "비밀번호", 8, 20)
         checkInput(binding.registerEmailText, binding.registerEmailMessage, "email", 8, 20)
+        inputName(binding.registerNameEdit)
 
         binding.registerEmailDuplicateBtn.setOnClickListener {
             lifecycleScope.launch {
@@ -165,9 +166,21 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    private fun inputName(editView: EditText) = with(binding){
+        editView.addTextChangedListener { s ->
+            editView.filters = arrayOf(InputFilter.LengthFilter(10 + 1))
+            val target = s.toString()
+            when(target.length){
+                0 -> { resisterMessagePrint(registerNameMessage, "이름은 공백이 될 수 없습니다.", Color.RED); user.Name = "" }
+                11 -> { resisterMessagePrint(registerNameMessage, "최대 허용 글자를 넘어섰습니다.", Color.RED); user.Name = "" }
+                else -> {registerNameMessage.visibility = View.INVISIBLE; user.Name = target}
+            }
+        }
+    }
+
     private suspend fun register() {
         Log.d("Register", "${user.ID}, ${user.PW}, ${user.Email}")
-        if (!user.ID.isEmpty() && !user.PW.isEmpty() && !user.Email.isEmpty()) {
+        if (!user.ID.isEmpty() && !user.PW.isEmpty() && !user.Email.isEmpty() && !user.Name.isEmpty()) {
             UserRepository.register(user)
         } else {
             Toast.makeText(this@RegisterActivity, "잘못된 입력이 존재합니다.", Toast.LENGTH_LONG).show()
