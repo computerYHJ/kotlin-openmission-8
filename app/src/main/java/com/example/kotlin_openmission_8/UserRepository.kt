@@ -1,10 +1,8 @@
 package com.example.kotlin_openmission_8
 
 import android.util.Log
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
 object UserRepository {
@@ -52,6 +50,39 @@ object UserRepository {
                 else 0
             }
         } catch (e: Exception) { 0 }
+    }
+
+    suspend fun attemptFindId(name: String, email: String): String{
+        return try{
+            val doc = db.collection("users")
+                .whereEqualTo("userName", name)
+                .whereEqualTo("userEmail", email)
+                .get().await()
+
+            if (doc.isEmpty) "1"
+            else{
+                val info = doc.documents.first()
+                val id = info.getString("userID") ?: return "2"
+                return id
+            }
+        } catch (e: Exception) {return "0"}
+    }
+
+    suspend fun attemptFindPwd(id: String, email: String): Int{
+        return try{
+            val doc = db.collection("users")
+                .whereEqualTo("userID", id)
+                .whereEqualTo("userEmail", email)
+                .get().await()
+
+            if (doc.isEmpty) 1
+            else{
+                try{
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(email).await()
+                    return 2
+                } catch (e: Exception) {return 0}
+            }
+        } catch (e: Exception) {return 0}
     }
 
 }
