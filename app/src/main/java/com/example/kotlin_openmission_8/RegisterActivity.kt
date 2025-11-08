@@ -13,21 +13,17 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.example.kotlin_openmission_8.databinding.RegisterBinding
 import com.example.kotlin_openmission_8.validator.InputValidator
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: RegisterBinding
-    private var db = FirebaseFirestore.getInstance()
-    private var dbUsers = db.collection("users")
 
     private var id: String = ""
     private var password: String = ""
     private var email: String = ""
 
     private var flag: Int = -1
+    private var pwdFlag: Int = -1
     private var emailFlag: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,12 +57,11 @@ class RegisterActivity : AppCompatActivity() {
             ) }
         }
         notEqualPwd()
-        binding.registerBtn.setOnClickListener { register() }
+        binding.registerBtn.setOnClickListener { lifecycleScope.launch { register() } }
     }
 
     private suspend fun duplicateBtn(editView: EditText, textView: TextView, fields: String, loc: String) {
-        var input: String = editView.text.toString()
-        Log.d("CHECK INPUT ERROR", "$flag, $emailFlag")
+        val input: String = editView.text.toString()
         when(fields){
             "userID" -> when(duplicate(fields, input, textView, loc)){
                 1 -> if(flag == 99) id = input
@@ -77,6 +72,7 @@ class RegisterActivity : AppCompatActivity() {
                 else -> email = ""
             }
         }
+        Log.d("CHECK INPUT ERROR", "$id, $email")
     }
 
     private suspend fun duplicate(
@@ -111,11 +107,15 @@ class RegisterActivity : AppCompatActivity() {
             var target = s.toString()
 
             when (InputValidator.validatorInput(target, start, end, loc)) {
-                1 -> flag = 1.also { resisterMessagePrint(textView, "형식에 맞는 입력이 아닙니다.", Color.RED) }
-                2 -> flag = 2.also { resisterMessagePrint(textView, "${loc}는 ${start}자 이상 입력해주세요.", Color.RED) }
-                3 -> flag = 3.also { resisterMessagePrint(textView, "${loc}는 ${start}자 이하로 입력해주세요.", Color.RED) }
+                1 -> {resisterMessagePrint(textView, "형식에 맞는 입력이 아닙니다.", Color.RED)
+                    if(loc == "아이디") flag = 1; else pwdFlag = 1}
+                2 -> { resisterMessagePrint(textView, "${loc}는 ${start}자 이상 입력해주세요.", Color.RED)
+                    if(loc == "아이디") flag = 2; else pwdFlag = 2}
+                3 -> { resisterMessagePrint(textView, "${loc}는 ${start}자 이하로 입력해주세요.", Color.RED)
+                    if(loc == "아이디") flag = 3; else pwdFlag = 3}
                 4 -> emailFlag = 4.also { resisterMessagePrint(textView, "이메일 형식에 맞지 않습니다.", Color.RED) }
-                else -> flag = 99.also { textView.visibility = View.INVISIBLE; emailFlag = 99 }
+                else -> { textView.visibility = View.INVISIBLE; emailFlag = 99
+                    if(loc == "아이디") flag = 99; else pwdFlag = 99}
             }
         }
     }
@@ -131,39 +131,19 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun checkSamePwd(pwd: String, samePwd: String) = with(binding) {
-        if (pwd.isEmpty()) {
-            resisterMessagePrint(registerSamePwdMsg, "비밀번호를 먼저 입력하세요.", Color.RED)
-            password = ""
-        } else {
-            if (samePwd.isEmpty()) {
-                resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED)
-                password = ""
-            } else if (pwd != samePwd) {
-                resisterMessagePrint(registerSamePwdMsg, "비밀번호가 일치하지 않습니다.", Color.RED)
-                password = ""
-            } else {
-                resisterMessagePrint(registerSamePwdMsg, "", Color.RED)
-                password = samePwd
-            }
+        when(InputValidator.validatorPwd(pwd, samePwd)){
+            1 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 먼저 입력하세요.", Color.RED); password = ""}
+            2 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED); password = ""}
+            3 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호가 일치하지 않습니다.", Color.RED); password = ""}
+            4 -> {if(pwdFlag == 99) {registerSamePwdMsg.visibility = View.INVISIBLE; password = samePwd}
+            else {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED); password = ""}}
         }
     }
 
-    private fun register() {
-        var mAuth = FirebaseAuth.getInstance()
-        Log.d("Register", id + ", " + password)
+    private suspend fun register() {
+        Log.d("Register", "$id, $password, $email")
         if (!id.isEmpty() && !password.isEmpty() && !email.isEmpty()) {
-            mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { result ->
-                    if (result.isSuccessful) {
-                        dbUsers.add(
-                            User(
-                                userID = id,
-                                userEmail = email,
-                                userPW = password
-                            )
-                        )
-                    }
-                }
+            UserRepository.register(id,password,email)
         } else {
             Toast.makeText(this@RegisterActivity, "잘못된 입력이 존재합니다.", Toast.LENGTH_LONG).show()
         }
