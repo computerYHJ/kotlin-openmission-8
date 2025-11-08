@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.kotlin_openmission_8.databinding.FindPwdBinding
 import com.example.kotlin_openmission_8.validator.InputValidator
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
 
 class FindPwdActivity: AppCompatActivity() {
 
@@ -27,7 +29,9 @@ class FindPwdActivity: AppCompatActivity() {
     private fun clickLoginBtn() = with(binding) {
         val id: String = findPwdIdText.text.toString()
         val email: String = findPwdEmailText.text.toString()
-        if(noInput(id,email)) attemptFindId(id,email)
+        if(noInput(id,email)) {
+            lifecycleScope.launch { attemptFindPwd(id, email) }
+        }
     }
 
     private fun showError(message: String){
@@ -44,30 +48,28 @@ class FindPwdActivity: AppCompatActivity() {
         val result: Int = InputValidator.validatorEmptyField(listOf(id,email))
         return when(result){
             0 -> {showError("아이디와 이메일을 입력해주세요"); false}
-            1 -> {showError("아이디를ㅋ 입력해주세요"); false}
+            1 -> {showError("아이디를 입력해주세요"); false}
             2 -> {showError("이메일을 입력해주세요"); false}
             else -> true
         }
     }
 
-    private fun attemptFindId(id: String, email: String) {
-        dbUsers.whereEqualTo("userID", id)
-            .whereEqualTo("userEmail", email)
-            .get().addOnCompleteListener { result ->
-                val doc = result.result
-                if (doc.isEmpty) return@addOnCompleteListener showError("아이디나 이메일이 일치하지 않습니다")
-                else find(email)
-            }
+    private suspend fun attemptFindPwd(id: String, email: String) {
+        when(UserRepository.attemptFindPwd(id, email)){
+            1 -> showError("아이디나 이메일이 일치하지 않습니다")
+            2 -> printResult()
+            0 -> showError("오류가 발생했습니다")
+        }
     }
 
-    private fun find(email: String) {
-        FirebaseAuth.getInstance()
-            .sendPasswordResetEmail(email)
-            .addOnCompleteListener { result ->
-                if (result.isSuccessful) printResult()
-                else showError("아이디나 이메일이 일치하지 않습니다")
-            }
-    }
+//    private fun find(email: String) {
+//        FirebaseAuth.getInstance()
+//            .sendPasswordResetEmail(email)
+//            .addOnCompleteListener { result ->
+//                if (result.isSuccessful) printResult()
+//                else showError("아이디나 이메일이 일치하지 않습니다")
+//            }
+//    }
 
 
 }
