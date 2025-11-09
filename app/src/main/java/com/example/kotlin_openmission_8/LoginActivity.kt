@@ -53,7 +53,11 @@ class LoginActivity : AppCompatActivity() {
             1 -> showError("아이디가 일치하지 않습니다")
             2 -> showError("이메일이 잘못되었습니다. 관리자에게 문의해주세요")
             0 -> showError("비밀번호가 일치하지 않습니다")
-            99 -> Log.d("D", "Login Success")
+            99 -> {
+                val intent = Intent(this@LoginActivity, UserViewActivity::class.java)
+                intent.putExtra("userID", id)
+                startActivity(intent)
+            }
         }
     }
 
