@@ -71,15 +71,15 @@ class RegisterActivity : AppCompatActivity() {
         val state = duplicate(fields, input, textView, loc)
         when(fields){
             "userID" -> when(flag){
-                99 -> if(state == 1) user.ID = input
-                else {user.ID = ""}
+                99 -> if(state == 1) user.userID = input
+                else {user.userID = ""}
             }
             "userEmail" -> when(emailFlag){
-                99 -> if(state == 1) user.Email = input
-                else {user.Email = ""}
+                99 -> if(state == 1) user.userEmail = input
+                else {user.userEmail = ""}
             }
         }
-        Log.d("CHECK INPUT ERROR", "${user.ID}, ${user.Email}")
+        Log.d("CHECK INPUT ERROR", "${user.userID}, ${user.userEmail}")
     }
 
     private suspend fun duplicate(
@@ -158,11 +158,11 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun checkSamePwd(pwd: String, samePwd: String) = with(binding) {
         when(InputValidator.validatorPwd(pwd, samePwd)){
-            1 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 먼저 입력하세요.", Color.RED); user.PW = ""}
-            2 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED); user.PW = ""}
-            3 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호가 일치하지 않습니다.", Color.RED); user.PW = ""}
-            4 -> {if(pwdFlag == 99) {registerSamePwdMsg.visibility = View.INVISIBLE; user.PW = samePwd}
-            else {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED); user.PW = ""}}
+            1 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 먼저 입력하세요.", Color.RED); user.userPW = ""}
+            2 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED); user.userPW = ""}
+            3 -> {resisterMessagePrint(registerSamePwdMsg, "비밀번호가 일치하지 않습니다.", Color.RED); user.userPW = ""}
+            4 -> {if(pwdFlag == 99) {registerSamePwdMsg.visibility = View.INVISIBLE; user.userPW = samePwd}
+            else {resisterMessagePrint(registerSamePwdMsg, "비밀번호를 다시 입력하세요.", Color.RED); user.userPW = ""}}
         }
     }
 
@@ -171,16 +171,16 @@ class RegisterActivity : AppCompatActivity() {
             editView.filters = arrayOf(InputFilter.LengthFilter(10 + 1))
             val target = s.toString()
             when(target.length){
-                0 -> { resisterMessagePrint(registerNameMessage, "이름은 공백이 될 수 없습니다.", Color.RED); user.Name = "" }
-                11 -> { resisterMessagePrint(registerNameMessage, "최대 허용 글자를 넘어섰습니다.", Color.RED); user.Name = "" }
-                else -> {registerNameMessage.visibility = View.INVISIBLE; user.Name = target}
+                0 -> { resisterMessagePrint(registerNameMessage, "이름은 공백이 될 수 없습니다.", Color.RED); user.userName = "" }
+                11 -> { resisterMessagePrint(registerNameMessage, "최대 허용 글자를 넘어섰습니다.", Color.RED); user.userName = "" }
+                else -> {registerNameMessage.visibility = View.INVISIBLE; user.userName = target}
             }
         }
     }
 
     private suspend fun register() {
-        Log.d("Register", "${user.ID}, ${user.PW}, ${user.Email}")
-        if (!user.ID.isEmpty() && !user.PW.isEmpty() && !user.Email.isEmpty() && !user.Name.isEmpty()) {
+        Log.d("Register", "${user.userID}, ${user.userPW}, ${user.userEmail}")
+        if (!user.userID.isEmpty() && !user.userPW.isEmpty() && !user.userEmail.isEmpty() && !user.userName.isEmpty()) {
             UserRepository.register(user)
         } else {
             Toast.makeText(this@RegisterActivity, "잘못된 입력이 존재합니다.", Toast.LENGTH_LONG).show()
