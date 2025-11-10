@@ -1,17 +1,21 @@
 package com.example.kotlin_openmission_8
 
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.kotlin_openmission_8.databinding.UserviewBinding
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class UserViewActivity : AppCompatActivity(){
     private lateinit var binding: UserviewBinding
 
     private var user: User = User()
+
+    private var id: String = ""
     private var currentDate = LocalDate.now()
     private var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     private var monthFormatter = DateTimeFormatter.ofPattern("MM월")
@@ -23,8 +27,48 @@ class UserViewActivity : AppCompatActivity(){
         binding = UserviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val id: String = intent.getStringExtra("userID")!!
+        id = intent.getStringExtra("userID")!!
 
+        setting()
+    }
+
+    private fun percent(startWorkout: String, endWorkout: String): Int {
+
+        val startDate = LocalDate.parse(startWorkout, formatter)
+        val futureDate = LocalDate.parse(endWorkout, formatter)
+
+        val totalDays = ChronoUnit.DAYS.between(startDate, futureDate)
+        val elapsedDays = ChronoUnit.DAYS.between(startDate, currentDate)
+
+        val progressPercentage = elapsedDays.toDouble() / totalDays * 100
+        var result = progressPercentage.toInt()
+        if (result >= 100) result = 100
+        return result
+    }
+
+    private fun runAnimation(start: String, end: String) {
+        binding.progressBar.post({
+            // Firestore 데이터를 이용해 progressBar 업데이트
+            binding.progressBar.setProgressWithAnimation(
+                percent(start, end),
+                1500
+            )
+            // 애니메이션 실행
+            val animOne = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.card_animation)
+            animOne.setStartOffset(0)
+            binding.one.startAnimation(animOne)
+
+            val animTwo = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.card_animation)
+            animTwo.setStartOffset(200)
+            binding.two.startAnimation(animTwo)
+
+            val animThree = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.card_animation)
+            animThree.setStartOffset(380)
+            binding.three.startAnimation(animThree)
+        })
+    }
+
+    private fun setting(){
         lifecycleScope.launch {
             user = UserRepository.getLoginUser(id)!!
             binding.mainViewUserName.text = user.userName
@@ -37,11 +81,9 @@ class UserViewActivity : AppCompatActivity(){
                 val viewEndWorkout = parsedDate.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"))
                 binding.userViewWorkoutDurationTextView.text = viewEndWorkout
             }
+            runAnimation(user.startWorkout, user.endWorkout)
 
         }
-
         binding.userViewNowMonthText.text = currentMonth
-
-
     }
 }
