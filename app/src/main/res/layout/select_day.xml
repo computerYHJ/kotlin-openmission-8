@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@drawable/card_view_1">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+        <NumberPicker
+            android:id="@+id/selectYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:theme="@style/CustomDatePickerStyle" />
+
+        <NumberPicker
+            android:id="@+id/selectMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:theme="@style/CustomDatePickerStyle" />
+
+        <NumberPicker
+            android:id="@+id/selectDays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:theme="@style/CustomDatePickerStyle" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/selectDaysBtn"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginVertical="20dp"
+        android:background="@drawable/rounded_button"
+        android:text="날짜 등록"
+        android:textColor="@color/white"/>
+</LinearLayout>
