@@ -45,7 +45,7 @@ class DurationActivity : AppCompatActivity() {
             workoutInfoSetting()
 
             binding.workoutDurationBtn.setOnClickListener {
-                lifecycleScope.launch { UserRepository.getUpdateUser(id, detail); finish() }
+                lifecycleScope.launch { UserRepository.getUpdateUser(id, detail, 1); finish() }
             }
         }
     }
