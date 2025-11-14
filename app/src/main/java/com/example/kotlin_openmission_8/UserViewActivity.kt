@@ -1,14 +1,17 @@
 package com.example.kotlin_openmission_8
 
-import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
+import android.view.WindowManager
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.kotlin_openmission_8.databinding.CheckWorkoutTimeBinding
 import com.example.kotlin_openmission_8.databinding.UserviewBinding
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -18,6 +21,7 @@ import java.time.temporal.ChronoUnit
 
 class UserViewActivity : AppCompatActivity() {
     private lateinit var binding: UserviewBinding
+    private lateinit var cardAnim: Animation
 
     private var user: User = User()
 
@@ -73,20 +77,15 @@ class UserViewActivity : AppCompatActivity() {
                 percent(start, end),
                 1500
             )
-            // 애니메이션 실행
-            val animOne =
-                AnimationUtils.loadAnimation(applicationContext, R.anim.card_animation)
-            animOne.startOffset = 0
+            val baseAnim = AnimationUtils.loadAnimation(this@UserViewActivity, R.anim.card_animation)
+
+            val animOne = baseAnim.cloneWithOffset(0)
             binding.one.startAnimation(animOne)
 
-            val animTwo =
-                AnimationUtils.loadAnimation(applicationContext, R.anim.card_animation)
-            animTwo.startOffset = 200
+            val animTwo = baseAnim.cloneWithOffset(200)
             binding.two.startAnimation(animTwo)
 
-            val animThree =
-                AnimationUtils.loadAnimation(applicationContext, R.anim.card_animation)
-            animThree.startOffset = 380
+            val animThree = baseAnim.cloneWithOffset(380)
             binding.three.startAnimation(animThree)
         })
     }
@@ -101,6 +100,7 @@ class UserViewActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             binding.userViewWorkoutStartBtn.setOnClickListener { lifecycleScope.launch{ timer() } }
+            binding.userViewCheckTime.setOnClickListener { lifecycleScope.launch { checkWorkoutTime() } }
         }
         binding.userViewNowMonthText.text = currentMonth
 
@@ -151,6 +151,31 @@ class UserViewActivity : AppCompatActivity() {
                 lifecycleScope.launch { UserRepository.getUpdateUser(id, detail, 2)}
             }
             .show()
+    }
+
+    private suspend fun checkWorkoutTime() {
+        val dia = CheckWorkoutTimeBinding.inflate(layoutInflater)
+        val dlg = AlertDialog.Builder(this@UserViewActivity, R.style.CustomAlertDialogTheme).create()
+        dlg.setView(dia.root)
+
+        dia.checkStartTime.text = user.startTime
+        dia.checkEndTime.text = user.endTime
+
+        dlg.show()  // 먼저 보여주기
+
+        dlg.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setLayout(
+                (resources.displayMetrics.widthPixels * 0.85).toInt(),
+                WindowManager.LayoutParams.WRAP_CONTENT
+            )
+        }
+    }
+
+    private fun Animation.cloneWithOffset(offset: Long): Animation {
+        val newAnim = AnimationUtils.loadAnimation(this@UserViewActivity, R.anim.card_animation)
+        newAnim.startOffset = offset
+        return newAnim
     }
 
 }
