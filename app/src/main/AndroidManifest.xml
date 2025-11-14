@@ -26,6 +26,8 @@
         <activity
             android:name=".RegisterActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".UserViewActivity" />
+        <activity android:name=".DurationActivity" />
     </application>
 
 </manifest>
