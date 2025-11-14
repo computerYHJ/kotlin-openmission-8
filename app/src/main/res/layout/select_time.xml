@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@drawable/card_view_1">
+
+    <TextView
+        android:id="@+id/workoutTimeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="- - - -"
+        android:textSize="20dp"
+        android:textColor="@color/black"/>
+
+    <TimePicker
+        android:id="@+id/selectTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner"/>
+
+    <Button
+        android:id="@+id/selectTimeBtn"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:layout_marginVertical="20dp"
+        android:background="@drawable/rounded_button"
+        android:text="시간 등록"
+        android:textColor="@color/white"/>
+
+</LinearLayout>
