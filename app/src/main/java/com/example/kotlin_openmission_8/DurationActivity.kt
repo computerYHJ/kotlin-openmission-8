@@ -14,6 +14,8 @@ import com.example.kotlin_openmission_8.databinding.WorkoutDurationBinding
 import com.example.kotlin_openmission_8.validator.InputValidator
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class DurationActivity : AppCompatActivity() {
     private lateinit var binding: WorkoutDurationBinding
@@ -83,11 +85,14 @@ class DurationActivity : AppCompatActivity() {
         var dlg = BottomSheetDialog(this@DurationActivity, R.style.CustomBottomSheetDialogTheme)
         dlg.setContentView(dia.root)
 
-        dia.selectYear.apply { minValue = 2010; maxValue = 2100; value = 2025 }
+        dia.selectYear.apply { minValue = 2010; maxValue = 2100; value = LocalDate.now().format(
+            DateTimeFormatter.ofPattern("yyyy")).toInt() }
 
-        dia.selectMonth.apply { minValue = 1; maxValue = 12; value = 11 }
+        dia.selectMonth.apply { minValue = 1; maxValue = 12; value = LocalDate.now().format(
+            DateTimeFormatter.ofPattern("MM")).toInt() }
 
-        dia.selectDays.apply { minValue = 1; maxValue = 31; value = 12 }
+        dia.selectDays.apply { minValue = 1; maxValue = 31; value = LocalDate.now().format(
+            DateTimeFormatter.ofPattern("dd")).toInt() }
 
         dia.selectYear.displayedValues =
             getDisplayDefault(dia.selectYear.minValue, dia.selectYear.maxValue, "년")
@@ -162,7 +167,7 @@ class DurationActivity : AppCompatActivity() {
 
     private fun wrongEndWorkout() {
         binding.workoutEndDaysWarringTextView.visibility = View.VISIBLE
-        binding.workoutEndDaysWarringTextView.text = "시작 날짜보다 이전 날짜를 선택했습니다."
+        binding.workoutEndDaysWarringTextView.text = "시작 날짜와 같거나 이전 날짜를 선택했습니다."
         binding.workoutEndDaysTextView.text = "버튼을 눌러 날짜를 선택하세요"
         binding.workoutEndDaysTextView.setTextColor(Color.GRAY);
     }
