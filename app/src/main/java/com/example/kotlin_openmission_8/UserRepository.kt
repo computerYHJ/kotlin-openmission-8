@@ -119,13 +119,18 @@ object UserRepository {
         }
     }
 
-    suspend fun getUpdateUser(id: String, detail: Map<String, String>) {
+    suspend fun getUpdateUser(id: String, detail: Map<String, String>, step: Int) {
         val db = FirebaseFirestore.getInstance()
         val doc = db.collection("users").whereEqualTo("userID", id).get().await()
 
         if (!doc.isEmpty) {
             for (user in doc.documents) {
-                db.collection("users").document(user.id).update(detail).await()
+                when (step) {
+                    1 -> db.collection("users").document(user.id).update(detail).await()
+                    2 -> db.collection("users").document(user.id)
+                        .update("workoutCount", detail["workoutCount"]!!.toInt()).await()
+                }
+
             }
         }
     }
