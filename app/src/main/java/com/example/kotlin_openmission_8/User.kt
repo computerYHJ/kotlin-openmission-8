@@ -5,7 +5,7 @@ data class User(
     var userPW: String = "",
     var userName: String = "",
     var userEmail: String = "",
-    var startWorkout: String = "",
+    var startWorkout: String = "2025-11-12",
     var endWorkout: String = "",
     var startTime: String = "",
     var endTime: String = "",
