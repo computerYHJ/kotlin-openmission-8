@@ -3,7 +3,10 @@ package com.example.kotlin_openmission_8
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
+
 
 object UserRepository {
 
@@ -14,19 +17,21 @@ object UserRepository {
                 .whereEqualTo(fields, input)
                 .get()
                 .await()//
-            when{
+            when {
                 result.isEmpty -> 1
                 !result.isEmpty -> 3
                 else -> 0
             }
-        } catch (e: Exception){ 0 }
+        } catch (e: Exception) {
+            0
+        }
     }
 
-    suspend fun register(user: User){
+    suspend fun register(user: User) {
         var db = FirebaseFirestore.getInstance()
         val mAuth = FirebaseAuth.getInstance()
         val dbUsers = db.collection("users")
-        try{
+        try {
             mAuth.createUserWithEmailAndPassword(user.userEmail, user.userPW).await()
             dbUsers.add(user).await()
         } catch (e: Exception) {
@@ -39,75 +44,89 @@ object UserRepository {
         return try {
             val doc = db.collection("users").whereEqualTo("userID", id).get().await()
 
-            if (doc.isEmpty) { 1 }
-            else {
+            if (doc.isEmpty) {
+                1
+            } else {
                 val info = doc.documents.first()
                 val email = info.getString("userEmail") ?: return 2
-
-                val result = FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pwd).await()
+                val result =
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pwd).await()
 
                 if (result.user != null) 99
                 else 0
             }
-        } catch (e: Exception) { 0 }
+        } catch (e: Exception) {
+            0
+        }
     }
 
-    suspend fun attemptFindId(name: String, email: String): String{
+    suspend fun attemptFindId(name: String, email: String): String {
         var db = FirebaseFirestore.getInstance()
-        return try{
+        return try {
             val doc = db.collection("users")
                 .whereEqualTo("userName", name)
                 .whereEqualTo("userEmail", email)
                 .get().await()
 
             if (doc.isEmpty) "1"
-            else{
+            else {
                 val info = doc.documents.first()
                 val id = info.getString("userID") ?: return "2"
                 return id
             }
-        } catch (e: Exception) {return "0"}
+        } catch (e: Exception) {
+            return "0"
+        }
     }
 
-    suspend fun attemptFindPwd(id: String, email: String): Int{
+    suspend fun attemptFindPwd(id: String, email: String): Int {
         var db = FirebaseFirestore.getInstance()
-        return try{
+        return try {
             val doc = db.collection("users")
                 .whereEqualTo("userID", id)
                 .whereEqualTo("userEmail", email)
                 .get().await()
 
             if (doc.isEmpty) 1
-            else{
-                try{
+            else {
+                try {
                     FirebaseAuth.getInstance().sendPasswordResetEmail(email).await()
                     return 2
-                } catch (e: Exception) {return 0}
+                } catch (e: Exception) {
+                    return 0
+                }
             }
-        } catch (e: Exception) {return 0}
+        } catch (e: Exception) {
+            return 0
+        }
     }
 
     suspend fun getLoginUser(id: String): User? {
         val db = FirebaseFirestore.getInstance()
         return try {
-            Log.d("UserRepo", "Searching userID=$id")   // 추가
             val doc = db.collection("users")
                 .whereEqualTo("userID", id)
                 .get().await()
-            Log.d("UserRepo", "Query result size=${doc.size()}")  // 추가
 
             if (doc.isEmpty) {
-                Log.e("UserRepo", "No user found for id=$id")     // 추가
                 null
             } else {
                 val user = doc.documents.first()
-                Log.d("UserRepo", "Found user: ${user.data}")
                 user.toObject(User::class.java)
             }
         } catch (e: Exception) {
-            Log.e("UserRepo", "Error fetching user", e)
             null
         }
     }
 
+    suspend fun getUpdateUser(id: String, detail: Map<String, String>) {
+        val db = FirebaseFirestore.getInstance()
+        val doc = db.collection("users").whereEqualTo("userID", id).get().await()
+
+        if (!doc.isEmpty) {
+            for (user in doc.documents) {
+                db.collection("users").document(user.id).update(detail).await()
+            }
+        }
+    }
 }
