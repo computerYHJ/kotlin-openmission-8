@@ -182,6 +182,7 @@ class RegisterActivity : AppCompatActivity() {
         Log.d("Register", "${user.userID}, ${user.userPW}, ${user.userEmail}")
         if (!user.userID.isEmpty() && !user.userPW.isEmpty() && !user.userEmail.isEmpty() && !user.userName.isEmpty()) {
             UserRepository.register(user)
+            finish()
         } else {
             Toast.makeText(this@RegisterActivity, "잘못된 입력이 존재합니다.", Toast.LENGTH_LONG).show()
         }
