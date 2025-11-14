@@ -1,6 +1,9 @@
 package com.example.kotlin_openmission_8.validator
 
-import com.google.firebase.firestore.QuerySnapshot
+import android.util.Log
+import com.example.kotlin_openmission_8.User
+import java.text.ParseException
+import java.text.SimpleDateFormat
 
 object InputValidator {
 
@@ -34,5 +37,19 @@ object InputValidator {
                 else -> 4
             }
         }
+    }
+
+    fun validatorDay(user: User, input: String): Boolean{
+        val formatter = SimpleDateFormat("yyyy-MM-dd")
+
+        var flag = true
+        if(!user.startWorkout.isEmpty()){
+            try{
+                val start = formatter.parse(user.startWorkout)
+                val end = formatter.parse(input)
+                flag = start!! > end
+            } catch (e: ParseException) { Log.d("dayError", e.toString())}
+        }
+        return flag
     }
 }
