@@ -47,7 +47,7 @@ object InputValidator {
             try{
                 val start = formatter.parse(user.startWorkout)
                 val end = formatter.parse(input)
-                flag = start!! > end
+                flag = start!! >= end
             } catch (e: ParseException) { Log.d("dayError", e.toString())}
         }
         return flag
