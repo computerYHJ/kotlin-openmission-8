@@ -1,5 +1,6 @@
 package com.example.kotlin_openmission_8
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
@@ -71,19 +72,29 @@ class UserViewActivity : AppCompatActivity(){
     private fun setting(){
         lifecycleScope.launch {
             user = UserRepository.getLoginUser(id)!!
-            binding.mainViewUserName.text = user.userName
-            binding.countUserName.text = user.userName
-            binding.userViewWorkoutCountTextView.text = user.workoutCount.toString()
-            binding.userViewMonthGoalTextView.text = "${(user.monthGoal - user.workoutCount)}회 남았습니다."
-            val endWorkOut = user.endWorkout
-            if(!endWorkOut.isEmpty()){
-                val parsedDate = LocalDate.parse(endWorkOut, formatter)
-                val viewEndWorkout = parsedDate.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"))
-                binding.userViewWorkoutDurationTextView.text = viewEndWorkout
-            }
+            uiSetting(user)
             runAnimation(user.startWorkout, user.endWorkout)
-
+            binding.workoutDaysSelect.setOnClickListener {
+                val intent = Intent(this@UserViewActivity, DurationActivity::class.java)
+                intent.putExtra("userID", user.userID)
+                startActivity(intent)
+            }
         }
         binding.userViewNowMonthText.text = currentMonth
     }
+
+    private fun uiSetting(user: User){
+        binding.mainViewUserName.text = user.userName
+        binding.countUserName.text = user.userName
+        binding.userViewWorkoutCountTextView.text = user.workoutCount.toString()
+        binding.userViewMonthGoalTextView.text = "${(user.monthGoal - user.workoutCount)}회 남았습니다."
+        val endWorkOut = user.endWorkout
+        if(!endWorkOut.isEmpty()){
+            val parsedDate = LocalDate.parse(endWorkOut, formatter)
+            val viewEndWorkout = parsedDate.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"))
+            binding.userViewWorkoutDurationTextView.text = viewEndWorkout
+        }
+    }
+
+
 }
