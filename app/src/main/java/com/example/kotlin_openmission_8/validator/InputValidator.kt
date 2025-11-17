@@ -1,40 +1,39 @@
 package com.example.kotlin_openmission_8.validator
 
 import android.util.Log
-import com.example.kotlin_openmission_8.User
+import com.example.kotlin_openmission_8.model.User
 import java.text.ParseException
 import java.text.SimpleDateFormat
 
 object InputValidator {
 
-    fun validatorEmptyField(fields: List<String>): Int{
+    fun validatorEmptyField(fields: List<String>): EmptyResult{
         return when{
-            fields[0].isEmpty() && fields[1].isEmpty() -> 0
-            fields[0].isEmpty() -> 1
-            fields[1].isEmpty() -> 2
-            else -> 3
+            fields[0].isEmpty() && fields[1].isEmpty() -> EmptyResult.EMPTY_FIELD
+            fields[0].isEmpty() -> EmptyResult.FIRST_EMPTY
+            fields[1].isEmpty() -> EmptyResult.SECOND_EMPTY
+            else -> EmptyResult.OK
         }
     }
-
-    fun validatorInput(input: String, start: Int, end: Int, loc: String): Int{
+    fun validatorInput(input: String, start: Int, end: Int, loc: String): InfoInputResult{
         val emailPattern = android.util.Patterns.EMAIL_ADDRESS
         var regex: Regex = Regex("""[^a-zA-Z0-9]""")
         return when{
-            loc != "email" && regex.containsMatchIn(input) -> 1
-            loc != "email" && input.length < start -> 2
-            loc != "email" && input.length > end -> 3
-            loc == "email" && !emailPattern.matcher(input).matches() -> 4
-            else -> 99
+            loc != "email" && regex.containsMatchIn(input) -> InfoInputResult.WRONG_FORM_INPUT
+            loc != "email" && input.length < start -> InfoInputResult.TOO_SHORT
+            loc != "email" && input.length > end -> InfoInputResult.TOO_LONG
+            loc == "email" && !emailPattern.matcher(input).matches() -> InfoInputResult.EMAIL_PATTERN_WRONG
+            else -> InfoInputResult.OK
         }
     }
 
-    fun validatorPwd(pwd: String, samePwd: String): Int{
+    fun validatorPwd(pwd: String, samePwd: String): PasswordResult{
         return when(pwd.isEmpty()){
-            true -> 1
+            true -> PasswordResult.EMPTY_PASSWORD
             false -> when{
-                samePwd.isEmpty() -> 2
-                pwd != samePwd -> 3
-                else -> 4
+                samePwd.isEmpty() -> PasswordResult.EMPTY_SAME_PASSWORD
+                pwd != samePwd -> PasswordResult.WRONG_PASSWORD
+                else -> PasswordResult.OK
             }
         }
     }
