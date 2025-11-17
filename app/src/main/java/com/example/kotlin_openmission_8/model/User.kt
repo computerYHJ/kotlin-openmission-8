@@ -1,4 +1,4 @@
-package com.example.kotlin_openmission_8
+package com.example.kotlin_openmission_8.model
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -20,5 +20,3 @@ data class User(
             LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     }
 }
-
-
