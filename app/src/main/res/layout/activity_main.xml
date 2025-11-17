@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:background="#F8FAF7"
     android:gravity="center"
-    tools:context=".MainActivity">
+    tools:context=".activity.MainActivity">
 
     <ImageView
         android:layout_width="wrap_content"
