@@ -1,4 +1,4 @@
-package com.example.kotlin_openmission_8
+package com.example.kotlin_openmission_8.activity
 
 import android.graphics.Color
 import android.os.Bundle
@@ -11,11 +11,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
+import com.example.kotlin_openmission_8.model.User
+import com.example.kotlin_openmission_8.model.UserRepository
 import com.example.kotlin_openmission_8.databinding.RegisterBinding
 import com.example.kotlin_openmission_8.validator.InputValidator
 import kotlinx.coroutines.launch
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterActivity_history : AppCompatActivity() {
     private lateinit var binding: RegisterBinding
 
     private var id: String = ""
@@ -88,7 +90,7 @@ class RegisterActivity : AppCompatActivity() {
         textView: TextView,
         loc: String
     ): Int{
-        return when(UserRepository.checkDupliceate(input,fields)) {
+        return when(UserRepository.checkDuplicate(input,fields)) {
             1 -> 1.also{resisterMessagePrint(textView, "사용할 수 있는 ${loc}입니다.", Color.BLUE)}
             3 -> 3.also{resisterMessagePrint(textView, "중복된 ${loc}를(을) 입력했습니다.", Color.RED)}
             else -> 0
@@ -184,7 +186,7 @@ class RegisterActivity : AppCompatActivity() {
             UserRepository.register(user)
             finish()
         } else {
-            Toast.makeText(this@RegisterActivity, "잘못된 입력이 존재합니다.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@RegisterActivity_history, "잘못된 입력이 존재합니다.", Toast.LENGTH_LONG).show()
         }
     }
 }
