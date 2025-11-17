@@ -1,16 +1,12 @@
-package com.example.kotlin_openmission_8
+package com.example.kotlin_openmission_8.model
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.tasks.await
 
-
 object UserRepository {
-
-    suspend fun checkDupliceate(input: String, fields: String): Int {
+    suspend fun checkDuplicate(input: String, fields: String): DuplicateInput {
         var db = FirebaseFirestore.getInstance()
         return try {
             val result = db.collection("users")
@@ -18,12 +14,12 @@ object UserRepository {
                 .get()
                 .await()//
             when {
-                result.isEmpty -> 1
-                !result.isEmpty -> 3
-                else -> 0
+                result.isEmpty -> DuplicateInput.OK
+                !result.isEmpty -> DuplicateInput.ALREADY_INPUT_DATA
+                else -> DuplicateInput.UNKNOWN_ERROR
             }
         } catch (e: Exception) {
-            0
+            DuplicateInput.UNKNOWN_ERROR
         }
     }
 
@@ -35,32 +31,31 @@ object UserRepository {
             mAuth.createUserWithEmailAndPassword(user.userEmail, user.userPW).await()
             dbUsers.add(user).await()
         } catch (e: Exception) {
-            Log.e("REGISTER ERROR", "회원가입이 실패하였습니다.")
+            Log.e("REGISTER ERROR", "회원가입 실패: ${e.message}")
         }
     }
-
-    suspend fun attemptLogin(id: String, pwd: String): Int {
+    suspend fun attemptLogin(id: String, pwd: String): LoginResult {
         var db = FirebaseFirestore.getInstance()
         return try {
             val doc = db.collection("users").whereEqualTo("userID", id).get().await()
 
             if (doc.isEmpty) {
-                1
+                LoginResult.ID_WRONG
             } else {
                 val info = doc.documents.first()
-                val email = info.getString("userEmail") ?: return 2
+                val email = info.getString("userEmail") ?: return LoginResult.EMAIL_WRONG
                 val result =
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(email, pwd).await()
 
-                if (result.user != null) 99
-                else 0
+                if (result.user != null) LoginResult.OK
+                else LoginResult.PASSWORD_WRONG
             }
         } catch (e: Exception) {
-            0
+            LoginResult.PASSWORD_WRONG
         }
     }
 
-    suspend fun attemptFindId(name: String, email: String): String {
+    suspend fun attemptFindId(name: String, email: String): FindResult {
         var db = FirebaseFirestore.getInstance()
         return try {
             val doc = db.collection("users")
@@ -68,18 +63,18 @@ object UserRepository {
                 .whereEqualTo("userEmail", email)
                 .get().await()
 
-            if (doc.isEmpty) "1"
+            if (doc.isEmpty) FindResult.WrongInput
             else {
                 val info = doc.documents.first()
-                val id = info.getString("userID") ?: return "2"
-                return id
+                val id = info.getString("userID") ?: return FindResult.IdError
+                return FindResult.Ok(id)
             }
         } catch (e: Exception) {
-            return "0"
+            return FindResult.UnknownError
         }
     }
 
-    suspend fun attemptFindPwd(id: String, email: String): Int {
+    suspend fun attemptFindPwd(id: String, email: String): FindResult {
         var db = FirebaseFirestore.getInstance()
         return try {
             val doc = db.collection("users")
@@ -87,17 +82,17 @@ object UserRepository {
                 .whereEqualTo("userEmail", email)
                 .get().await()
 
-            if (doc.isEmpty) 1
+            if (doc.isEmpty) FindResult.IdError
             else {
                 try {
                     FirebaseAuth.getInstance().sendPasswordResetEmail(email).await()
-                    return 2
+                    return FindResult.Ok(id)
                 } catch (e: Exception) {
-                    return 0
+                    return FindResult.UnknownError
                 }
             }
         } catch (e: Exception) {
-            return 0
+            return FindResult.UnknownError
         }
     }
 
