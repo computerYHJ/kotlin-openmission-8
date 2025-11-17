@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kotlinopenmission8">
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,14 +20,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".FindIdActivity" />
-        <activity android:name=".FindPwdActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.FindIdActivity" />
+        <activity android:name=".activity.FindPwdActivity" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activity.RegisterActivity_history"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".UserViewActivity" />
-        <activity android:name=".DurationActivity" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".activity.UserViewActivity" />
+        <activity android:name=".activity.DurationActivity" />
     </application>
 
 </manifest>
