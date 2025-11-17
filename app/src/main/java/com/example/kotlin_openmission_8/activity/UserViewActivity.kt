@@ -1,4 +1,4 @@
-package com.example.kotlin_openmission_8
+package com.example.kotlin_openmission_8.activity
 
 import android.content.Intent
 import android.graphics.Color
@@ -11,6 +11,9 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.kotlin_openmission_8.R
+import com.example.kotlin_openmission_8.model.User
+import com.example.kotlin_openmission_8.model.UserRepository
 import com.example.kotlin_openmission_8.databinding.CheckWorkoutTimeBinding
 import com.example.kotlin_openmission_8.databinding.UserviewBinding
 import kotlinx.coroutines.launch
@@ -21,7 +24,6 @@ import java.time.temporal.ChronoUnit
 
 class UserViewActivity : AppCompatActivity() {
     private lateinit var binding: UserviewBinding
-    private lateinit var cardAnim: Animation
 
     private var user: User = User()
 
@@ -161,7 +163,7 @@ class UserViewActivity : AppCompatActivity() {
         dia.checkStartTime.text = user.startTime
         dia.checkEndTime.text = user.endTime
 
-        dlg.show()  // 먼저 보여주기
+        dlg.show()
 
         dlg.window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

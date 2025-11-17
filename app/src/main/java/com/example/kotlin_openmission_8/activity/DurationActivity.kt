@@ -1,13 +1,14 @@
-package com.example.kotlin_openmission_8
+package com.example.kotlin_openmission_8.activity
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.kotlin_openmission_8.R
+import com.example.kotlin_openmission_8.model.User
+import com.example.kotlin_openmission_8.model.UserRepository
 import com.example.kotlin_openmission_8.databinding.SelectDayBinding
 import com.example.kotlin_openmission_8.databinding.SelectTimeBinding
 import com.example.kotlin_openmission_8.databinding.WorkoutDurationBinding
@@ -124,6 +125,7 @@ class DurationActivity : AppCompatActivity() {
         if (step == 2 && InputValidator.validatorDay(user, select)) {
             flag = false; wrongEndWorkout()
         }
+
 
         if (flag) {
             binding.workoutStartDaysWarringTextView.visibility = View.INVISIBLE

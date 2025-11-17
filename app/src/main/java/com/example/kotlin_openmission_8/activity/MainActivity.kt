@@ -1,4 +1,4 @@
-package com.example.kotlin_openmission_8
+package com.example.kotlin_openmission_8.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.kotlin_openmission_8.R
 import com.example.kotlin_openmission_8.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
