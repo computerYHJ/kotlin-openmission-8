@@ -26,14 +26,13 @@ class UserViewActivity : AppCompatActivity() {
     private lateinit var binding: UserviewBinding
 
     private var user: User = User()
-
     private var id: String = ""
     private var currentDate = LocalDate.now()
     private var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     private var monthFormatter = DateTimeFormatter.ofPattern("MM월")
     private var currentMonth = currentDate.format(monthFormatter)
-
     private var timerFlag = false
+    private var count: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,6 +95,7 @@ class UserViewActivity : AppCompatActivity() {
         lifecycleScope.launch {
             uiSetting(user)
             runAnimation(user.startWorkout, user.endWorkout)
+            count = user.monthGoal - user.workoutCount
             binding.workoutDaysSelect.setOnClickListener {
                 val intent = Intent(this@UserViewActivity, DurationActivity::class.java)
                 intent.putExtra("userID", user.userID)
@@ -108,16 +108,17 @@ class UserViewActivity : AppCompatActivity() {
 
     }
 
-    private fun uiSetting(user: User) {
-        binding.mainViewUserName.text = user.userName
-        binding.countUserName.text = user.userName
-        binding.userViewWorkoutCountTextView.text = user.workoutCount.toString()
-        binding.userViewMonthGoalTextView.text = "${(user.monthGoal - user.workoutCount)}회 남았습니다."
+    private fun uiSetting(user: User) = with(binding){
+        mainViewUserName.text = user.userName
+        countUserName.text = user.userName
+        userViewWorkoutCountTextView.text = user.workoutCount.toString()
+        if(count > 0) userViewMonthGoalTextView.text = "${(user.monthGoal - user.workoutCount)}회 남았습니다."
+        else {userViewWorkoutCountTextView.text = "달성했습니다!"; countZeroText.text = "목표를"}
         val endWorkOut = user.endWorkout
         if (!endWorkOut.isEmpty()) {
             val parsedDate = LocalDate.parse(endWorkOut, formatter)
             val viewEndWorkout = parsedDate.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"))
-            binding.userViewWorkoutDurationTextView.text = viewEndWorkout
+            userViewWorkoutDurationTextView.text = viewEndWorkout
         }
     }
 
@@ -148,7 +149,8 @@ class UserViewActivity : AppCompatActivity() {
                 userViewChrono.stop()
                 timerFlag = false
                 userViewWorkoutCountTextView.text = (user.workoutCount + 1).toString()
-                userViewMonthGoalTextView.text = "${(user.monthGoal - user.workoutCount) - 1}회 남았습니다."
+                if(count - 1 > 0 ) userViewMonthGoalTextView.text = "${count - 1}회 남았습니다."
+                else {userViewWorkoutCountTextView.text = "달성했습니다!"; countZeroText.text = "목표를"}
                 val detail = mapOf<String,String>("workoutCount" to "${user.workoutCount + 1}")
                 lifecycleScope.launch { UserRepository.getUpdateUser(id, detail, 2)}
             }
