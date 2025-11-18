@@ -1,6 +1,10 @@
-package com.example.kotlin_openmission_8.model
+package com.example.kotlin_openmission_8.Repository
 
 import android.util.Log
+import com.example.kotlin_openmission_8.model.DuplicateInput
+import com.example.kotlin_openmission_8.model.FindResult
+import com.example.kotlin_openmission_8.model.LoginResult
+import com.example.kotlin_openmission_8.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
